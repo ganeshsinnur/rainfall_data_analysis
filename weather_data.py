@@ -58,7 +58,8 @@ def get_gpm(date):
     end = date.advance(1, 'day')
 
     gpm = (ee.ImageCollection('NASA/GPM_L3/IMERG_V07')
-           .filterDate(start, end))
+           .filterDate(start, end)
+           .select('precipitation'))  # Select only this band — V07 has mixed schemas (5 vs 9 bands)
     return gpm
 
 

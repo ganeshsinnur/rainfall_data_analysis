@@ -68,36 +68,54 @@ def sample_points(date, num_bins=NUM_BINS):
     # Create elevation bins
     elevation_bins = get_elevation_bins(num_bins)
 
-    # Combine precipitation and elevation bins into a unique bin:
-    # unique_bin = elevation_bins * num_bins + precipitation_bins
-    # This gives us num_bins^2 possible classes
+    # Combine bins into a unique class band.
+    # Rename explicitly so classBand is always known regardless of GEE's
+    # internal band-name propagation rules after arithmetic.
     unique_bins = (
         elevation_bins
         .multiply(num_bins)
         .add(precipitation_bins)
+        .rename('class_bin')
+        .uint8()
     )
 
     # Calculate how many points per class
     num_points_per_class = max(1, NUM_POINTS // (num_bins * num_bins))
 
-    # Define a region of interest (global land areas)
-    # Using a broad region; you can narrow this to your area of interest
-    region = ee.Geometry.Polygon(
-        [[[-180, -60], [-180, 60], [180, 60], [180, -60], [-180, -60]]]
-    )
+    # Define a region of interest matching the GOES-16 footprint (The Americas)
+    # Using a rectangle instead of a global polygon avoids geometric ambiguity.
+    region = ee.Geometry.Rectangle([-125, -60, -25, 60])
 
     # Stratified sampling to get balanced points across all bin classes
     points = unique_bins.stratifiedSample(
         numPoints=num_points_per_class,
-        classBand='elevation',  # The band name after binning
+        classBand='class_bin',
         region=region,
         scale=SCALE,
         geometries=True
     )
 
+    # Guard: if stratified sampling returned nothing, fall back to random points
+    size = points.size().getInfo()
+    print(f"  Stratified sample returned {size} points.")
+
+    if size == 0:
+        print("  Warning: stratified sample empty, falling back to random sampling.")
+        points = unique_bins.sample(
+            region=region,
+            scale=SCALE,
+            numPixels=NUM_POINTS,
+            geometries=True
+        )
+        size = points.size().getInfo()
+        print(f"  Random sample returned {size} points.")
+
+    if size == 0:
+        print("  No points found for this date, skipping.")
+        return
+
     # Convert to a list and yield (date, point) tuples
-    points_list = points.toList(points.size())
-    size = points_list.size().getInfo()
+    points_list = points.toList(size)
 
     for i in range(size):
         point = ee.Feature(points_list.get(i)).geometry()
@@ -138,14 +156,27 @@ def get_training_example(date, point):
             defaultValue=0
         )
 
+        if input_data is None:
+            return None
+
         # Get all band arrays
         band_names = goes_image.bandNames().getInfo()
         input_arrays = []
         for band in band_names:
-            arr = np.array(input_data.get(band).getInfo())
-            input_arrays.append(arr)
+            try:
+                arr_data = input_data.get(band).getInfo()
+                if arr_data is None:
+                    continue
+                arr = np.array(arr_data)
+                # Check if we got the expected 5x5 patch
+                if arr.shape != (PATCH_SIZE, PATCH_SIZE):
+                    continue
+                input_arrays.append(arr)
+            except Exception:
+                continue
 
-        if len(input_arrays) == 0:
+        if len(input_arrays) < len(band_names):
+            # Missing some bands, skip this example
             return None
 
         # Stack bands: shape becomes (H, W, num_bands)
