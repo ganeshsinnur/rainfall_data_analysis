@@ -1,0 +1,6 @@
+torch
+transformers
+earthengine-api
+python-dotenv
+numpy
+matplotlib
