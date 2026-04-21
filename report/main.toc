@@ -34,9 +34,11 @@
 \contentsline {section}{\numberline {5.5}Model Saving}{13}{section.5.5}%
 \contentsline {chapter}{\numberline {6}Results and Discussion}{14}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Training Convergence}{14}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Predictions}{14}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Discussion}{14}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Limitations}{14}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Future Work}{15}{section.6.5}%
-\contentsline {chapter}{\numberline {7}Conclusion}{16}{chapter.7}%
-\contentsline {chapter}{\numberline {A}Python Source Code}{18}{appendix.A}%
+\contentsline {section}{\numberline {6.2}Inference and Case Studies}{14}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Example 1: Atmospheric Moisture Analysis}{14}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Example 2: Developing Storm Front}{15}{subsection.6.2.2}%
+\contentsline {section}{\numberline {6.3}Discussion}{15}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Limitations}{16}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Future Work}{16}{section.6.5}%
+\contentsline {chapter}{\numberline {7}Conclusion}{17}{chapter.7}%
+\contentsline {chapter}{\numberline {A}Python Source Code}{19}{appendix.A}%

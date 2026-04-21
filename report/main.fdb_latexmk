@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1776804245.39578 "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" "main.pdf" "main" 1776804246.33402 0
+["pdflatex"] 1776810527.9134 "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" "main.pdf" "main" 1776810530.69774 0
   "/etc/texmf/web2c/texmf.cnf" 1772142128.08921 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" 1776803204.79418 42423 2000c6cc53b4d723955d0efc6de7bbee ""
+  "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" 1776810524.87496 44065 d08e73cbef30d24e1d94847e0002ba42 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -125,11 +125,13 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1776710377.12953 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1776710438 8212157 af05ef724b5b07c1709592049b7684cb ""
-  "IITG_logo.png" 1776717930.00176 105922 d82ce6f0d1272fa632a587529b3162a0 ""
-  "main.aux" 1776804246.2869 9470 352a7b8750a777b7aa4e01177b586271 "pdflatex"
-  "main.out" 1776804246.2879 6169 2cb555e74ff0c148760849949e3e832a "pdflatex"
-  "main.tex" 1776803204.79418 42423 2000c6cc53b4d723955d0efc6de7bbee ""
-  "main.toc" 1776804246.2879 3222 f1ff3b4ba0778e6dfff206eb62883919 "pdflatex"
+  "IITG_logo.png" 1776809279.89434 105922 d82ce6f0d1272fa632a587529b3162a0 ""
+  "ex01_result.png" 1776809792.25764 352288 86f812406f30b1c278d70745460bacd9 ""
+  "ex02_result.png" 1776809799.47352 491632 2940438897d3dea9f7704ee2273fcbae ""
+  "main.aux" 1776810530.55306 11152 142bb1d418892c4788517cc0693f1166 "pdflatex"
+  "main.out" 1776810530.55506 6766 fe4f2c055fd56c8ef88731be9a249394 "pdflatex"
+  "main.tex" 1776810524.87496 44065 d08e73cbef30d24e1d94847e0002ba42 ""
+  "main.toc" 1776810530.55506 3452 8285ed187b042d23e14cfa7bd5c7c080 "pdflatex"
   (generated)
   "main.aux"
   "main.log"

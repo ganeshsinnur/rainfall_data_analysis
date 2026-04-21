@@ -58,6 +58,11 @@ class WeatherConfig(PretrainedConfig):
 
 class WeatherModel(PreTrainedModel):
     config_class = WeatherConfig
+    _tied_weights_keys = []
+
+    @property
+    def all_tied_weights_keys(self):
+        return {}
 
     def __init__(self, config):
         super().__init__(config)
