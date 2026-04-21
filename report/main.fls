@@ -222,10 +222,6 @@ INPUT ./main.toc
 INPUT ./main.toc
 INPUT main.toc
 OUTPUT main.toc
-INPUT ./main.lof
-INPUT ./main.lof
-INPUT main.lof
-OUTPUT main.lof
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm

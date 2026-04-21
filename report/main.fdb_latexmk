@@ -1,7 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1776751232.48585 "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" "main.pdf" "main" 1776751234.51737 0
+["pdflatex"] 1776804245.39578 "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" "main.pdf" "main" 1776804246.33402 0
   "/etc/texmf/web2c/texmf.cnf" 1772142128.08921 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" 1776751232.16692 42417 fe9e9731d10b56910e474be54816ea2b ""
+  "/home/ganeshs/shitCodes/mini proj 25-26/report/main.tex" 1776803204.79418 42423 2000c6cc53b4d723955d0efc6de7bbee ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -126,14 +126,12 @@
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1776710377.12953 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1776710438 8212157 af05ef724b5b07c1709592049b7684cb ""
   "IITG_logo.png" 1776717930.00176 105922 d82ce6f0d1272fa632a587529b3162a0 ""
-  "main.aux" 1776751234.3826 9572 f4258f71c73aa8601aa458ffc139bbd9 "pdflatex"
-  "main.lof" 1776751234.3846 160 3d779cc98b6f299ec43eb90ebb04f45f "pdflatex"
-  "main.out" 1776751234.3846 6295 8ea89fc04c4a28102699ed2105985c88 "pdflatex"
-  "main.tex" 1776751232.16692 42417 fe9e9731d10b56910e474be54816ea2b ""
-  "main.toc" 1776751234.3846 3281 560369f464df8be2b30e4b4619e3d48d "pdflatex"
+  "main.aux" 1776804246.2869 9470 352a7b8750a777b7aa4e01177b586271 "pdflatex"
+  "main.out" 1776804246.2879 6169 2cb555e74ff0c148760849949e3e832a "pdflatex"
+  "main.tex" 1776803204.79418 42423 2000c6cc53b4d723955d0efc6de7bbee ""
+  "main.toc" 1776804246.2879 3222 f1ff3b4ba0778e6dfff206eb62883919 "pdflatex"
   (generated)
   "main.aux"
-  "main.lof"
   "main.log"
   "main.out"
   "main.pdf"
