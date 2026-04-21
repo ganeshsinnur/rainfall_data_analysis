@@ -129,78 +129,59 @@ def get_training_example(date, point):
 
     - Inputs: 5x5 pixel patch with all available satellite bands
     - Labels: Precipitation at +2h and +6h from the example's time
-
-    Args:
-        date: ee.Date object.
-        point: ee.Geometry.Point.
-
-    Returns:
-        tuple: (inputs_array, labels_array) as numpy arrays,
-               or None if data is unavailable.
     """
     try:
-        # Get MODIS satellite data as input (multi-spectral bands)
+        # Get MODIS satellite data as input
         satellite_collection = get_satellite_data(date)
         if satellite_collection.size().getInfo() == 0:
             return None
 
-        # Use the first available MODIS image for this date
         satellite_image = ee.Image(satellite_collection.first())
+        band_names = satellite_image.bandNames().getInfo()
 
-        # Define a small region around the point for the 5x5 patch
+        # Prepare future labels
+        date_plus_2h = date.advance(2, 'hour')
+        gpm_2h = get_gpm(date_plus_2h).mean().select(['precipitation'], ['precip_2h']).clamp(0, MAX_PRECIPITATION)
+        
+        date_plus_6h = date.advance(6, 'hour')
+        gpm_6h = get_gpm(date_plus_6h).mean().select(['precipitation'], ['precip_6h']).clamp(0, MAX_PRECIPITATION)
+
+        # Combine into one image to fetch EVERYTHING in one single network request
+        combined_image = satellite_image.addBands(gpm_2h).addBands(gpm_6h)
+
+        # Define region for the 5x5 patch
         region = point.buffer(SCALE * PATCH_SIZE / 2).bounds()
 
-        # Sample the input bands as a 5x5 patch
-        input_data = satellite_image.sampleRectangle(
-            region=region,
-            defaultValue=0
+        # Force the image to the correct scale (5000m) before sampling
+        # This ensures we get exactly 5x5 pixels for our region
+        reprojected_image = combined_image.reproject(
+            crs='EPSG:4326', 
+            scale=SCALE
         )
 
-        if input_data is None:
+        # ONE network request for all bands and labels
+        info = reprojected_image.sampleRectangle(region=region, defaultValue=0).getInfo()
+
+        if not info:
             return None
 
-        # Get all band arrays
-        band_names = satellite_image.bandNames().getInfo()
+        # Extract input bands
         input_arrays = []
         for band in band_names:
-            try:
-                arr_data = input_data.get(band).getInfo()
-                if arr_data is None:
-                    continue
-                arr = np.array(arr_data)
-                # Check if we got the expected 5x5 patch
-                if arr.shape != (PATCH_SIZE, PATCH_SIZE):
-                    continue
-                input_arrays.append(arr)
-            except Exception:
-                continue
-
-        if len(input_arrays) < len(band_names):
-            # Missing some bands, skip this example
-            return None
-
-        # Stack bands: shape becomes (H, W, num_bands)
+            arr = np.array(info.get(band))
+            if arr.shape != (PATCH_SIZE, PATCH_SIZE):
+                return None
+            input_arrays.append(arr)
+        
         inputs = np.stack(input_arrays, axis=-1).astype(np.float32)
 
-        # --- Labels ---
-        # Get precipitation at +2 hours
-        date_plus_2h = date.advance(2, 'hour')
-        gpm_2h = get_gpm(date_plus_2h).mean()
-        precip_2h = (gpm_2h.select('precipitation')
-                     .clamp(0, MAX_PRECIPITATION)
-                     .sampleRectangle(region=region, defaultValue=0))
+        # Extract labels
+        label_2h = np.array(info.get('precip_2h')).astype(np.float32)
+        label_6h = np.array(info.get('precip_6h')).astype(np.float32)
+        
+        if label_2h.shape != (PATCH_SIZE, PATCH_SIZE) or label_6h.shape != (PATCH_SIZE, PATCH_SIZE):
+            return None
 
-        # Get precipitation at +6 hours
-        date_plus_6h = date.advance(6, 'hour')
-        gpm_6h = get_gpm(date_plus_6h).mean()
-        precip_6h = (gpm_6h.select('precipitation')
-                     .clamp(0, MAX_PRECIPITATION)
-                     .sampleRectangle(region=region, defaultValue=0))
-
-        label_2h = np.array(precip_2h.get('precipitation').getInfo()).astype(np.float32)
-        label_6h = np.array(precip_6h.get('precipitation').getInfo()).astype(np.float32)
-
-        # Stack labels: shape (H, W, 2) — precipitation at 2h and 6h
         labels = np.stack([label_2h, label_6h], axis=-1)
 
         return inputs, labels
@@ -235,6 +216,7 @@ def create_dataset(dates, output_dir='./data', max_points_per_date=50):
             if count >= max_points_per_date:
                 break
 
+            print(f"  Collecting example {count + 1}/{max_points_per_date}...", end='\r')
             result = get_training_example(date_obj, point)
             if result is not None:
                 inputs, labels = result
@@ -242,10 +224,10 @@ def create_dataset(dates, output_dir='./data', max_points_per_date=50):
                 all_labels.append(labels)
                 total_examples += 1
                 count += 1
-                print(f"  Collected example {count} | "
-                      f"Input shape: {inputs.shape}, Label shape: {labels.shape}")
+                # print(f"  Collected example {count} | "
+                #       f"Input shape: {inputs.shape}, Label shape: {labels.shape}")
 
-        print(f"  Total from {date_str}: {count} examples")
+        print(f"\n  Total from {date_str}: {count} examples")
 
     if total_examples > 0:
         # Save as numpy arrays
