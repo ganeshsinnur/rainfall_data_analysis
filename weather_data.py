@@ -2,7 +2,8 @@
 weather_data.py
 ---------------
 Handles Google Earth Engine initialization and satellite data retrieval.
-Uses GPM (Global Precipitation Measurement) for precipitation data
+Uses MODIS Terra (MOD09GA) for multi-spectral satellite imagery,
+GPM (Global Precipitation Measurement) for precipitation data,
 and SRTM for elevation data.
 """
 
@@ -73,16 +74,17 @@ def get_elevation():
     return ee.Image('USGS/SRTMGL1_003').select('elevation')
 
 
-def get_goes_data(date):
+def get_satellite_data(date):
     """
-    Retrieves GOES-16 satellite imagery bands for a specific date.
-    GOES provides the multi-spectral bands used as model inputs.
+    Retrieves MODIS Terra daily surface reflectance (MOD09GA) for a
+    specific date.  MODIS has global coverage, including India, and
+    provides 7 spectral bands (visible, NIR, and SWIR).
 
     Args:
         date: ee.Date object or string in 'YYYY-MM-DD' format.
 
     Returns:
-        ee.ImageCollection of GOES satellite data.
+        ee.ImageCollection of MODIS satellite data.
     """
     if isinstance(date, str):
         date = ee.Date(date)
@@ -90,9 +92,19 @@ def get_goes_data(date):
     start = date
     end = date.advance(1, 'day')
 
-    goes = (ee.ImageCollection('NOAA/GOES/16/MCMIPC')
-            .filterDate(start, end))
-    return goes
+    # MODIS Terra Surface Reflectance Daily (500m, 7 bands)
+    modis = (ee.ImageCollection('MODIS/061/MOD09GA')
+             .filterDate(start, end)
+             .select([
+                 'sur_refl_b01',  # 620-670 nm  (Red)
+                 'sur_refl_b02',  # 841-876 nm  (NIR)
+                 'sur_refl_b03',  # 459-479 nm  (Blue)
+                 'sur_refl_b04',  # 545-565 nm  (Green)
+                 'sur_refl_b05',  # 1230-1250 nm (SWIR-1)
+                 'sur_refl_b06',  # 1628-1652 nm (SWIR-2)
+                 'sur_refl_b07',  # 2105-2155 nm (SWIR-3)
+             ]))
+    return modis
 
 
 def get_precipitation_bins(data, num_bins):
@@ -147,10 +159,15 @@ if __name__ == "__main__":
     initialize_gee()
 
     # Quick test: fetch GPM data for a sample date
-    test_date = '2023-06-15'
+    test_date = '2023-07-15'
     gpm_data = get_gpm(test_date)
     count = gpm_data.size().getInfo()
     print(f"GPM images found for {test_date}: {count}")
+
+    # Test MODIS data
+    modis_data = get_satellite_data(test_date)
+    modis_count = modis_data.size().getInfo()
+    print(f"MODIS images found for {test_date}: {modis_count}")
 
     # Test elevation
     elev = get_elevation()

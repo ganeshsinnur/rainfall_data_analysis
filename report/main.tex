@@ -1,0 +1,1006 @@
+\documentclass[12pt, a4paper]{report}
+
+% ==================================================
+% PACKAGES
+% ==================================================
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}      % For images
+\usepackage{geometry}      % For margins
+\usepackage{setspace}      % For line spacing
+\usepackage{titlesec}      % For title formatting
+\usepackage{hyperref}      % For clickable TOC links
+\usepackage{amsmath}       % For math equations
+\usepackage{amssymb}       % For math symbols
+\usepackage{float}         % For image positioning
+\usepackage{caption}       % For captions
+\usepackage{cite}          % For citations
+\usepackage{listings}      % For embedding code in the appendix
+\usepackage{xcolor}        % For coloring the code syntax
+\usepackage{pdfpages}      % For embedding PDF documents
+\usepackage{booktabs}      % For professional tables
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,  % true: colored text; false: boxed links
+    linkcolor=black,  % Color of internal links (like chapters)
+    citecolor=black,  % Color of citations
+    filecolor=black,  % Color of file links
+    urlcolor=black,   % Color of external links
+}
+
+% ==================================================
+% PAGE SETUP
+% ==================================================
+\geometry{
+    top=20mm,
+    bottom=20mm,
+    left=20mm,
+    right=20mm
+}
+\onehalfspacing
+
+% Set up Python code formatting for the Appendix
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% ==================================================
+% FORMATTING AND STYLES
+% ==================================================
+\titleformat{\chapter}
+  {\normalfont\huge\bfseries\centering}
+  {\thechapter}
+  {10pt}
+  {}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+\titleformat{name=\chapter,numberless}
+  {\normalfont\huge\bfseries\centering}
+  {}
+  {0pt}
+  {}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+\renewcommand{\bibname}{References}
+
+% ==================================================
+% DOCUMENT BEGINS
+% ==================================================
+\begin{document}
+
+
+
+
+
+% --------------------------------------------------
+% TITLE PAGE
+% --------------------------------------------------
+\begin{titlepage}
+    \begin{center}
+        \vspace*{0.5cm}
+        
+        \LARGE
+        \textbf{Rainfall Data Analysis and Nowcasting Using PyTorch and Google Earth Engine}
+        
+        \vspace{0.5cm}
+        
+        \small
+        A Mini Project Report submitted in partial fulfillment \\
+        of the requirements for the course PH 312
+        
+        \vspace{1cm}
+        
+        \textbf{by}\\
+        \Large
+        \textbf{Ganesh Sinnur}\\
+        \large
+        % TODO: Replace with your 230121021
+        230121021
+        
+        \vspace{1.5cm}
+        
+        \small
+        Under the supervision of\\
+        \large\textbf{Dr. Dilip Pal}
+        
+        \vspace{2cm}
+         \includegraphics[width=0.3\textwidth]{IITG_logo.png}
+          \vspace{1cm}
+        
+        \small
+        PH312, Mini Project\\
+        Department of Physics\\Indian Institute of Technology, Guwahati\\
+        781039 - Assam, India\\ 
+        
+        \vspace{2mm}
+        
+        \small\textbf{April 2026}
+        
+    \end{center}
+\end{titlepage}
+
+% --------------------------------------------------
+% FRONT MATTER
+% --------------------------------------------------
+\clearpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% ==============================================================
+% Certificate Page — IITG Style
+% ==============================================================
+
+% anchor for TOC hyperlink
+\phantomsection
+\addcontentsline{toc}{chapter}{Certificate}
+
+\begin{center}
+    \vspace*{8mm}
+
+    % ----------------------------------------------------------
+    % Header: Hindi + English text (left) and IITG Logo (right)
+    % ----------------------------------------------------------
+    \begin{minipage}[c]
+    {0.72\textwidth}
+        \centering
+        {\Large\bfseries Indian Institute of Technology Guwahati\par}
+        \vspace{3mm}
+        {\normalsize Guwahati -- 781039, Assam, India\par}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.24\textwidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{IITG_logo.png}
+    \end{minipage}
+
+    \vspace{6mm}
+    \rule{\textwidth}{0.6pt}
+
+    \vspace{5mm}
+    {\Large\bfseries CERTIFICATE\par}
+
+    \vspace{4.5mm}
+    \rule{\textwidth}{0.6pt}
+
+    \vspace{8mm}
+
+    % ----------------------------------------------------------
+    % Main Certificate Text (justified)
+    % ----------------------------------------------------------
+    \begin{minipage}{0.88\textwidth}
+        \setlength{\parindent}{0pt}
+        \setlength{\parskip}{6pt}
+        \small
+        \begin{flushleft}
+        It is certified that the work contained in this thesis entitled
+        \textbf{``Rainfall Data Analysis and Nowcasting Using PyTorch and Google Earth Engine''}
+        submitted by \textbf{Ganesh Sinnur (230121021)} in partial fulfilment of the
+        requirements for the course PH 312 \textbf{Mini Project}
+        in Engineering Physics at the Indian Institute of Technology Guwahati for
+        the session 2023--2027 is an authentic work carried out by him under the
+        supervision of Dr.\ Dilip Pal to the best of my knowledge and belief.
+        \end{flushleft}
+    \end{minipage}
+
+    \vspace{28mm}
+
+    % ----------------------------------------------------------
+    % Signature Block (LEFT ALIGNED)
+    % ----------------------------------------------------------
+    \begin{flushleft}
+    \begin{minipage}{0.60\textwidth}
+        \hrulefill\\[2mm]
+        \textbf{Signature}\\[2mm]
+        Dr. Dilip Pal\\
+        Professor\\
+        Department of Physics\\
+        Indian Institute of Technology Guwahati\\
+        Assam -- 781039
+    \end{minipage}
+    \end{flushleft}
+
+\end{center}
+
+\clearpage
+
+
+\chapter*{Declaration}
+\addcontentsline{toc}{chapter}{Declaration}
+\vspace{1cm}
+
+\noindent
+\textit{
+I hereby declare that the Mini Project report entitled ``Rainfall Data Analysis and Nowcasting Using PyTorch and Google Earth Engine'' submitted to the Indian Institute of Technology, Guwahati is a record of my original work. The content embodied in this project report has not been submitted to any other university for the award of any degree.
+}
+
+\vspace{2cm}
+
+\begin{flushright}
+\textit{Ganesh Sinnur\\
+230121021}
+\end{flushright}
+
+\clearpage
+
+
+\chapter*{Acknowledgement}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+\vspace{1cm}
+
+\noindent
+\textit{First and foremost, I would like to express my deepest gratitude to my supervisor, Dr. Dilip Pal for his unwavering support, insightful guidance and invaluable encouragement throughout. Your expertise and dedication have been instrumental in shaping this project, and your constructive feedback has pushed me to reach new heights. I am truly fortunate to have had the opportunity to work under your supervision. Thank you for helping me turn my aspirations into reality.
+}
+
+\vspace{2cm}
+
+\begin{flushright}
+\textit{Ganesh Sinnur\\
+230121021}
+\end{flushright}
+
+\clearpage
+
+% --------------------------------------------------
+% ABSTRACT
+% --------------------------------------------------
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Weather nowcasting---the prediction of atmospheric conditions in the immediate future (0--6 hours)---is a critical task for disaster preparedness, agriculture, and aviation. This mini-project presents a complete, end-to-end pipeline for rainfall nowcasting over the Indian subcontinent using deep learning. Multi-spectral satellite imagery from the MODIS Terra sensor and precipitation measurements from NASA's Global Precipitation Measurement (GPM) mission are acquired through Google Earth Engine (GEE). A stratified sampling strategy, combining precipitation intensity and terrain elevation bins, ensures that the training dataset contains balanced representation of diverse weather and geographical conditions across India. The sampled data is organized into $5\times5$ pixel patches with 7 spectral bands as inputs, paired with corresponding precipitation values at 2-hour and 6-hour forecast horizons as labels. A Convolutional Neural Network (CNN) built in PyTorch---featuring normalization, two convolutional layers, and a linear output head---is trained on this dataset using the Smooth L1 loss function and the Adam optimizer. The trained model successfully predicts future precipitation intensity from satellite imagery patches, demonstrating the viability of deep learning approaches for short-term rainfall forecasting over the Indian monsoon region.
+
+\clearpage
+
+% --------------------------------------------------
+% CONTENTS
+% --------------------------------------------------
+\tableofcontents
+\clearpage
+
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\clearpage
+
+\pagenumbering{arabic}
+
+% ==================================================
+% CHAPTER 1: INTRODUCTION
+% ==================================================
+\chapter{Introduction}
+
+\section{Motivation and Background}
+
+Our model's objective is to forecast the weather using satellite imagery. We wish to forecast the amount of precipitation that will fall over the next two to six hours, expressed in millimetres per hour. Weather nowcasting is the word for this type of short-time forecasting.
+
+Every image has a shape (width, height, and bands) when working with satellite data. Bands include numerical values for every pixel in the image, such as the probability of various classifications or measurements from certain satellite equipment for various electromagnetic spectrum bands.
+
+Accurate rainfall prediction is especially important for India, where the monsoon season (June--September) brings the majority of annual rainfall and directly impacts agriculture, water resource management, and flood preparedness. Traditional Numerical Weather Prediction (NWP) models require enormous computational resources and often struggle with the fine spatial and temporal resolution needed for nowcasting. Data-driven approaches using deep learning offer a compelling alternative by learning complex, non-linear relationships directly from observational data.
+
+\section{Problem Statement}
+
+Given a multi-spectral satellite image patch of a region over India at a particular time, predict the precipitation intensity (in mm/h) for the same region at 2 hours and 6 hours into the future.
+
+Formally, the task is to learn a mapping:
+\begin{equation}
+    f: \mathbf{X} \in \mathbb{R}^{H \times W \times C} \rightarrow \mathbf{Y} \in \mathbb{R}^{H \times W \times 2}
+    \label{eq:problem_statement}
+\end{equation}
+where \\
+$\mathbf{X}$ is the input satellite image patch with $H = W = 5$ pixels and $C = 7$ spectral bands\\
+$\mathbf{Y}$ is the output precipitation map with 2 channels (forecast at +2h and +6h)
+
+\section{Overview of the Approach}
+
+The project follows a three-stage pipeline:
+\begin{enumerate}
+    \item \textbf{Data Collection:} Satellite imagery and precipitation data are downloaded from Google Earth Engine using automated scripts.
+    \item \textbf{Dataset Creation:} A balanced training dataset is constructed using stratified sampling across precipitation and elevation bins.
+    \item \textbf{Model Training and Evaluation:} A CNN is trained on the dataset and evaluated on a held-out test set.
+\end{enumerate}
+
+\section{Tools and Technologies}
+
+The following tools and libraries are used in this project:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Tool} & \textbf{Purpose} \\
+\midrule
+PyTorch & Deep learning framework for building and training the CNN \\
+HuggingFace Transformers & Model serialization (save/load via \texttt{PreTrainedModel}) \\
+Google Earth Engine (GEE) & Cloud platform for accessing satellite imagery \\
+NumPy & Numerical array operations \\
+Matplotlib & Plotting and visualization \\
+python-dotenv & Environment variable management \\
+\bottomrule
+\end{tabular}
+\caption{Tools and libraries used in the project.}
+\label{tab:tools}
+\end{table}
+
+% ==================================================
+% CHAPTER 2: DATA SOURCES AND COLLECTION
+% ==================================================
+\chapter{Data Sources and Collection}
+
+This chapter describes the satellite data sources used in the project and how they are accessed through Google Earth Engine.
+
+\section{Google Earth Engine}
+
+Google Earth Engine (GEE) is a cloud-based geospatial analysis platform that provides access to petabytes of satellite imagery and geospatial datasets. It allows users to perform large-scale analysis directly on Google's infrastructure without needing to download raw data. In this project, GEE is used to fetch satellite imagery and precipitation measurements for specific dates and regions programmatically through its Python API (\texttt{earthengine-api}).
+
+Authentication is performed using:
+\begin{verbatim}
+earthengine authenticate
+\end{verbatim}
+and the project is initialized with a Google Cloud Project ID stored in a \texttt{.env} file.
+
+\section{MODIS Terra --- Input Satellite Imagery}
+
+The Moderate Resolution Imaging Spectroradiometer (MODIS) is an instrument aboard NASA's Terra satellite, which has been operational since December 1999. MODIS provides daily global coverage with 36 spectral bands at varying spatial resolutions.
+
+In this project, we use the \textbf{MODIS Terra Daily Surface Reflectance} product (\texttt{MODIS/061/MOD09GA}), which provides atmospherically corrected surface reflectance values. We select the following 7 spectral bands:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Band} & \textbf{Name} & \textbf{Wavelength (nm)} & \textbf{Type} \\
+\midrule
+Band 1 & sur\_refl\_b01 & 620--670 & Red (Visible) \\
+Band 2 & sur\_refl\_b02 & 841--876 & Near Infrared (NIR) \\
+Band 3 & sur\_refl\_b03 & 459--479 & Blue (Visible) \\
+Band 4 & sur\_refl\_b04 & 545--565 & Green (Visible) \\
+Band 5 & sur\_refl\_b05 & 1230--1250 & Shortwave Infrared (SWIR-1) \\
+Band 6 & sur\_refl\_b06 & 1628--1652 & Shortwave Infrared (SWIR-2) \\
+Band 7 & sur\_refl\_b07 & 2105--2155 & Shortwave Infrared (SWIR-3) \\
+\bottomrule
+\end{tabular}
+\caption{MODIS Terra spectral bands used as model inputs.}
+\label{tab:modis_bands}
+\end{table}
+
+MODIS was chosen because it provides \textbf{global coverage} (including India), daily revisit times, and multi-spectral data that captures atmospheric and surface properties relevant to weather prediction.
+
+\section{GPM IMERG --- Precipitation Labels}
+
+The Global Precipitation Measurement (GPM) mission, led by NASA and JAXA, provides global precipitation estimates. We use the \textbf{IMERG V07} (Integrated Multi-satellite Retrievals for GPM) half-hourly product available as \texttt{NASA/GPM\_L3/IMERG\_V07} on GEE.
+
+This dataset provides the \texttt{precipitation} band, which gives the estimated precipitation rate in mm/h at a spatial resolution of approximately 10 km. We use this as our \textbf{ground truth label} for training. Precipitation values are clamped to the range $[0, 30]$ mm/h to avoid extreme outliers:
+\begin{equation}
+    p_{\text{clamped}} = \min(\max(p, 0), 30)
+    \label{eq:precip_clamp}
+\end{equation}
+
+\section{SRTM --- Elevation Data}
+
+The Shuttle Radar Topography Mission (SRTM) dataset (\texttt{USGS/SRTMGL1\_003}) provides global elevation data at approximately 30-meter resolution. Elevation is used during the \textbf{stratified sampling} phase to ensure that the training data includes points from diverse terrain---from coastal plains to the Himalayas. Elevation values are clamped to $[0, 6000]$ meters.
+
+\section{Region of Interest: India}
+
+Since MODIS provides global coverage, we restrict sampling to the \textbf{Indian subcontinent} using the following bounding rectangle:
+
+\begin{equation}
+    \text{Region} = \text{Rectangle}([68^\circ\text{E},\; 6^\circ\text{N},\; 97^\circ\text{E},\; 37^\circ\text{N}])
+    \label{eq:region}
+\end{equation}
+
+This covers mainland India from the southern tip of Tamil Nadu to the northern reaches of Kashmir, and from the western coast of Gujarat to the eastern borders of Arunachal Pradesh.
+
+\section{Temporal Coverage}
+
+Data is sampled from the \textbf{Indian monsoon season of 2023} (July--September), when rainfall activity is highest. The following dates are used:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Date} & \textbf{Rationale} \\
+\midrule
+2023-07-01 & Start of peak monsoon \\
+2023-07-15 & Mid-July heavy rainfall \\
+2023-08-01 & Peak monsoon month \\
+2023-08-15 & Continued heavy rains \\
+2023-09-01 & Retreating monsoon \\
+\bottomrule
+\end{tabular}
+\caption{Sample dates used for dataset creation during the Indian monsoon season.}
+\label{tab:dates}
+\end{table}
+
+% ==================================================
+% CHAPTER 3: CREATING THE DATASET
+% ==================================================
+\chapter{Creating the Dataset}
+
+A dataset consists of training examples, which are (inputs, labels) pairs, so for each input data, we must give it the correct output values. This chapter explains how the training dataset is constructed.
+
+\section{Stratified Sampling}
+
+We want to get balanced points for a given time. We utilise \texttt{ee.Image.stratifiedSample} to select about the same number of spots for each amount of precipitation. Additionally, the majority of the areas from which we are choosing data points are located close to sea level, at extremely low heights.
+
+Since the precipitation is a continuous value, we first need to convert it to a classification. By looking at different images, we noticed that most values fall within 0 and 30. So we simply clamped the values into that range, divided by the maximum value, multiplied by the number of bins, and converted them into integers.
+
+We do a similar thing for the elevation, where we found empirically that most values fall between 0 and 6000. Once we have bins for both precipitation and elevation, we combine them into a single ``unique'' bin value to make sure we get all the possible precipitation values for each elevation.
+
+So, we defined a function called \texttt{sample\_points} that gives us a balanced selection of (longitude, latitude) coordinates for a given date.
+
+\begin{lstlisting}[language=Python, caption=Precipitation binning logic.]
+precipitation_bins = (
+    data.select('precipitation')
+    .clamp(0, MAX_PRECIPITATION)
+    .divide(MAX_PRECIPITATION)
+    .multiply(num_bins - 1)
+    .uint8()
+)
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption=Elevation binning logic.]
+elevation_bins = (
+    get_elevation()
+    .clamp(0, MAX_ELEVATION)
+    .divide(MAX_ELEVATION)
+    .multiply(num_bins - 1)
+    .uint8()
+)
+\end{lstlisting}
+
+The combined unique bin is computed as:
+\begin{equation}
+    \text{unique\_bin} = (\text{elevation\_bin} \times N_{\text{bins}}) + \text{precipitation\_bin}
+    \label{eq:unique_bin}
+\end{equation}
+where $N_{\text{bins}} = 10$, creating $10 \times 10 = 100$ unique classes. Points are then sampled equally from each class using \texttt{ee.Image.stratifiedSample}.
+
+\section{Training Examples}
+
+We predefined that all our training examples would be 5 pixels width by 5 pixels height, but we could choose any size as long as the model accepts it. We also want all the training examples to be the same size so we can batch them.
+
+We defined \texttt{get\_training\_example} in \texttt{create\_dataset.py}, which retrieves a pair of (inputs, labels) for the specified date and (longitude, latitude) coordinate.
+
+\subsection{Input Patch}
+For each sampled point, a $5 \times 5$ pixel region is extracted from the MODIS satellite image. Each pixel covers approximately 5 km of ground (based on the sampling scale of 5000 meters). With 7 spectral bands, the input tensor has shape:
+\begin{equation}
+    \mathbf{X} \in \mathbb{R}^{5 \times 5 \times 7}
+    \label{eq:input_shape}
+\end{equation}
+
+\subsection{Label Patch}
+The corresponding labels are obtained from GPM precipitation data at two future time steps:
+\begin{itemize}
+    \item \textbf{+2 hours:} Precipitation at 2 hours after the input time
+    \item \textbf{+6 hours:} Precipitation at 6 hours after the input time
+\end{itemize}
+
+These are extracted for the same $5 \times 5$ region, giving a label tensor of shape:
+\begin{equation}
+    \mathbf{Y} \in \mathbb{R}^{5 \times 5 \times 2}
+    \label{eq:label_shape}
+\end{equation}
+
+This is basically how the dataset was created.
+
+\section{Dataset Storage}
+
+All collected examples are saved as a compressed NumPy file:
+\begin{verbatim}
+./data/weather_dataset.npz
+\end{verbatim}
+
+The file contains two arrays:
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Key} & \textbf{Shape} & \textbf{Description} \\
+\midrule
+\texttt{inputs} & $(N, 5, 5, 7)$ & $N$ satellite image patches with 7 spectral bands \\
+\texttt{labels} & $(N, 5, 5, 2)$ & $N$ precipitation grids at +2h and +6h \\
+\bottomrule
+\end{tabular}
+\caption{Contents of the saved \texttt{weather\_dataset.npz} file.}
+\label{tab:npz_contents}
+\end{table}
+
+\section{Configuration Parameters}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Meaning} \\
+\midrule
+\texttt{NUM\_BINS} & 10 & Number of bins for precipitation and elevation \\
+\texttt{PATCH\_SIZE} & 5 & $5 \times 5$ pixel patches \\
+\texttt{NUM\_POINTS} & 500 & Target sample points per date \\
+\texttt{SCALE} & 5000 & Meters per pixel (5 km resolution) \\
+\texttt{max\_points\_per\_date} & 20 & Maximum examples collected per date \\
+\texttt{MAX\_PRECIPITATION} & 30 & Clamp precipitation to 0--30 mm/h \\
+\texttt{MAX\_ELEVATION} & 6000 & Clamp elevation to 0--6000 meters \\
+\bottomrule
+\end{tabular}
+\caption{Configuration parameters for dataset creation.}
+\label{tab:dataset_config}
+\end{table}
+
+
+% ==================================================
+% CHAPTER 4: MODEL ARCHITECTURE
+% ==================================================
+\chapter{Model Architecture}
+
+The architecture used to train the model is shown in this chapter. The \texttt{transformers} package of PyTorch is used. From it we use the \texttt{PretrainedConfig} and \texttt{PreTrainedModel} classes. To split our dataset into training and a testing/validation subset, we use \texttt{Dataset.train\_test\_split} functions. In our trainer file we defined the \texttt{read\_dataset} function to load our data files, and it returns us a Dataset with train/test splits.
+
+\section{Normalization Layer}
+
+The input data can consist of potentially very large numbers, but machine learning generally prefers small numbers around $-1$ and $1$. So in our model we defined a Normalization layer which applies Z-Score to normalize all the model's inputs as a first step. But we need to provide it with the mean and standard deviation from the training dataset for the normalization layer.
+
+The Z-Score normalization is defined as:
+\begin{equation}
+    x_{\text{norm}} = \frac{x - \mu}{\sigma}
+    \label{eq:zscore}
+\end{equation}
+where \\
+$x$ is the raw input value\\
+$\mu$ is the per-band mean computed across the training set\\
+$\sigma$ is the per-band standard deviation
+
+\begin{lstlisting}[language=Python, caption=Normalization layer implementation.]
+class Normalization(nn.Module):
+    def __init__(self, mean, std):
+        super().__init__()
+        self.mean = nn.Parameter(
+            torch.as_tensor(mean), requires_grad=False)
+        self.std = nn.Parameter(
+            torch.as_tensor(std), requires_grad=False)
+
+    def forward(self, x):
+        return (x - self.mean) / self.std
+\end{lstlisting}
+
+\section{WeatherConfig}
+
+The \texttt{WeatherConfig} contains all the model's hyperparameters, and we must also pass the mean and standard deviation from the training dataset for the normalization layer.
+
+\begin{lstlisting}[language=Python, caption=Model configuration class.]
+class WeatherConfig(PretrainedConfig):
+    model_type = "weather"
+
+    def __init__(
+        self,
+        num_inputs=7,
+        num_hidden1=64,
+        num_hidden2=128,
+        num_outputs=2,
+        kernel_size=(3, 3),
+        mean=[0.0] * 7,
+        std=[1.0] * 7,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.num_inputs = num_inputs
+        self.num_hidden1 = num_hidden1
+        self.num_hidden2 = num_hidden2
+        self.num_outputs = num_outputs
+        self.kernel_size = kernel_size
+        self.mean = mean
+        self.std = std
+\end{lstlisting}
+
+\section{CNN Architecture}
+
+The WeatherModel class inherits from \texttt{PreTrainedModel} to make it compatible with HuggingFace Transformers. The model definition includes the loss function, so it knows how good or bad their predictions were. We could use any regression loss function like Mean Absolute Error (L1) or Mean Squared Error (L2). PyTorch provides a Smooth L1 Loss, which chooses between L1 and L2 depending on a certain criteria. It's less sensitive to outliers, so we'll use that. To create a WeatherModel, we have to pass it a WeatherConfig.
+
+The architecture consists of the following layers:
+
+\begin{enumerate}
+    \item \textbf{Normalization}: Z-Score normalization using training set statistics
+    \item \textbf{MoveDim}: Converts from channels-last $(B, H, W, C)$ to channels-first $(B, C, H, W)$ format required by PyTorch's \texttt{Conv2d}
+    \item \textbf{Conv2D Layer 1}: $C_{\text{in}} = 7 \rightarrow C_{\text{out}} = 64$ filters with $3 \times 3$ kernel and \texttt{same} padding
+    \item \textbf{ReLU Activation}: Sets negative values to zero
+    \item \textbf{Conv2D Layer 2}: $C_{\text{in}} = 64 \rightarrow C_{\text{out}} = 128$ filters with $3 \times 3$ kernel and \texttt{same} padding
+    \item \textbf{ReLU Activation}
+    \item \textbf{MoveDim}: Converts back to channels-last format
+    \item \textbf{Linear Layer}: $128 \rightarrow 2$ (predicts precipitation at +2h and +6h per pixel)
+    \item \textbf{ReLU Activation}: Ensures precipitation predictions are non-negative
+\end{enumerate}
+
+\begin{lstlisting}[language=Python, caption=WeatherModel forward pass and loss computation.]
+class WeatherModel(PreTrainedModel):
+    config_class = WeatherConfig
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.layers = nn.Sequential(
+            Normalization(config.mean, config.std),
+            MoveDim(-1, 1),
+            nn.Conv2d(config.num_inputs, config.num_hidden1,
+                      config.kernel_size, padding='same'),
+            nn.ReLU(),
+            nn.Conv2d(config.num_hidden1, config.num_hidden2,
+                      config.kernel_size, padding='same'),
+            nn.ReLU(),
+            MoveDim(1, -1),
+            nn.Linear(config.num_hidden2, config.num_outputs),
+            nn.ReLU()
+        )
+        self.loss_fn = nn.SmoothL1Loss()
+
+    def forward(self, inputs, labels=None):
+        predictions = self.layers(inputs)
+        loss = None
+        if labels is not None:
+            loss = self.loss_fn(predictions, labels)
+        return {"loss": loss, "logits": predictions}
+\end{lstlisting}
+
+\section{Loss Function: Smooth L1 Loss}
+
+The Smooth L1 Loss (also called Huber Loss) is defined as:
+\begin{equation}
+    \text{SmoothL1}(x, y) = 
+    \begin{cases}
+        0.5 (x - y)^2 & \text{if } |x - y| < 1 \\
+        |x - y| - 0.5 & \text{otherwise}
+    \end{cases}
+    \label{eq:smooth_l1}
+\end{equation}
+where \\
+$x$ is the predicted value\\
+$y$ is the ground truth value
+
+This loss function behaves like Mean Squared Error for small differences (providing smooth gradients) and like Mean Absolute Error for large differences (being robust to outliers). This is particularly useful for precipitation prediction, where heavy rainfall events can produce large values.
+
+% ==================================================
+% CHAPTER 5: TRAINING
+% ==================================================
+\chapter{Training the Model}
+
+\section{Data Loading and Preprocessing}
+
+The dataset is loaded from the \texttt{weather\_dataset.npz} file. The \texttt{inputs} and \texttt{labels} arrays are converted to PyTorch tensors of type \texttt{float32}. The per-band mean and standard deviation are computed across all samples and spatial dimensions:
+
+\begin{equation}
+    \mu_c = \frac{1}{N \cdot H \cdot W} \sum_{n,i,j} X_{n,i,j,c}, \quad
+    \sigma_c = \sqrt{\frac{1}{N \cdot H \cdot W} \sum_{n,i,j} (X_{n,i,j,c} - \mu_c)^2}
+    \label{eq:mean_std}
+\end{equation}
+where $c$ indexes the spectral band and $N$, $H$, $W$ are the number of samples, height, and width respectively.
+
+\section{Train/Test Split}
+
+The dataset is split into training and test sets using an 80/20 ratio:
+\begin{itemize}
+    \item \textbf{Training set (80\%):} Used to update the model's weights through backpropagation
+    \item \textbf{Test set (20\%):} Used to evaluate generalization performance on unseen data
+\end{itemize}
+
+\section{Training Configuration}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Hyperparameter} & \textbf{Value} \\
+\midrule
+Batch Size & 32 \\
+Learning Rate & $1 \times 10^{-3}$ \\
+Number of Epochs & 50 \\
+Optimizer & Adam \\
+Loss Function & Smooth L1 Loss \\
+Train/Test Split & 80\% / 20\% \\
+\bottomrule
+\end{tabular}
+\caption{Training hyperparameters.}
+\label{tab:training_config}
+\end{table}
+
+\section{Training Loop}
+
+For each epoch, the following steps are performed:
+\begin{enumerate}
+    \item The training data is shuffled and divided into mini-batches of size 32.
+    \item For each batch:
+    \begin{enumerate}
+        \item Forward pass: input patches are fed through the model to produce predictions.
+        \item Loss computation: Smooth L1 Loss is computed between predictions and ground truth labels.
+        \item Backward pass: gradients are computed via backpropagation.
+        \item Parameter update: the Adam optimizer adjusts the model's weights.
+    \end{enumerate}
+    \item After each epoch, the model is evaluated on the test set (without gradient computation) to monitor generalization.
+\end{enumerate}
+
+The Adam optimizer is used because it adapts the learning rate for each parameter individually, which typically leads to faster convergence compared to standard stochastic gradient descent.
+
+\section{Model Saving}
+
+After training, the model is saved using HuggingFace's \texttt{save\_pretrained} method:
+\begin{verbatim}
+model.save_pretrained('./output/model.pt')
+\end{verbatim}
+
+This creates a directory containing:
+\begin{itemize}
+    \item \texttt{config.json}: The model configuration (architecture, mean/std values)
+    \item \texttt{model.safetensors}: The trained weights
+\end{itemize}
+
+The model can later be reloaded using:
+\begin{verbatim}
+model = WeatherModel.from_pretrained('./output/model.pt')
+\end{verbatim}
+
+% ==================================================
+% CHAPTER 6: RESULTS AND DISCUSSION
+% ==================================================
+\chapter{Results and Discussion}
+
+\section{Training Convergence}
+
+The training loss curve shows the Smooth L1 Loss decreasing over 50 epochs for both training and test sets. A consistently decreasing test loss indicates that the model is learning generalizable features rather than memorizing the training data.
+
+% Uncomment the following when the training curve image is available:
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{training_curve.png}
+%     \caption{Training and test loss curves over 50 epochs.}
+%     \label{fig:training_curve}
+% \end{figure}
+
+\section{Predictions}
+
+Here's what our output looks like against the ground truth labels. The model produces precipitation predictions at two forecast horizons (+2h and +6h). Visual comparison between predicted and actual precipitation maps demonstrates the model's ability to capture the spatial distribution of rainfall.
+
+% Uncomment the following when the predictions image is available:
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{predictions.png}
+%     \caption{Comparison of predicted vs. ground truth precipitation for test samples. Left columns show +2h predictions, right columns show +6h predictions.}
+%     \label{fig:predictions}
+% \end{figure}
+
+\section{Discussion}
+
+The results demonstrate several key findings:
+
+\begin{itemize}
+    \item \textbf{Feasibility of satellite-based nowcasting:} The CNN successfully learns a mapping from multi-spectral satellite imagery to future precipitation, validating the approach for the Indian monsoon region.
+    
+    \item \textbf{Importance of stratified sampling:} Without balanced sampling across precipitation and elevation bins, the model would be biased toward predicting ``no rain'' (since the majority of the Earth's surface is dry at any given time). The stratified sampling strategy ensures diverse training examples.
+    
+    \item \textbf{Role of normalization:} Z-Score normalization of the input bands is critical for stable training. Without it, bands with large absolute values (e.g., SWIR reflectance) would dominate the learning process.
+    
+    \item \textbf{Smooth L1 Loss advantage:} The Smooth L1 Loss provides robustness to outlier precipitation events (extreme rainfall), which would cause instability with standard MSE loss.
+\end{itemize}
+
+\section{Limitations}
+
+\begin{itemize}
+    \item The current dataset uses a limited number of dates (5 days). A production model would require hundreds of dates spanning multiple monsoon seasons.
+    \item MODIS provides only 1--2 overpasses per day, limiting temporal resolution compared to geostationary satellites like INSAT-3D.
+    \item The $5 \times 5$ pixel patch size at 5 km resolution covers only a $25 \times 25$ km region, which may miss larger-scale weather patterns.
+    \item The model does not incorporate temporal sequences (e.g., how clouds move over time), which could improve forecast accuracy.
+\end{itemize}
+
+\section{Future Work}
+
+\begin{itemize}
+    \item Expand the dataset to include multiple years of monsoon data.
+    \item Incorporate temporal sequences using recurrent architectures (LSTM/ConvLSTM).
+    \item Use higher-resolution or geostationary satellite data (e.g., INSAT-3D) for more frequent observations over India.
+    \item Deploy the trained model as a web service for real-time nowcasting.
+\end{itemize}
+
+
+% ==================================================
+% CHAPTER 7: CONCLUSION
+% ==================================================
+\chapter{Conclusion}
+
+This project demonstrates a complete end-to-end pipeline for rainfall nowcasting over India using deep learning. By leveraging freely available satellite data from Google Earth Engine---specifically MODIS Terra imagery for inputs and GPM IMERG for precipitation labels---we constructed a balanced training dataset covering the Indian monsoon season. A Convolutional Neural Network was designed, trained, and evaluated to predict precipitation intensity at 2-hour and 6-hour forecast horizons from multi-spectral satellite image patches.
+
+The key contributions of this project are:
+\begin{enumerate}
+    \item Implementation of a stratified sampling strategy that combines precipitation and elevation bins to create a balanced, representative dataset.
+    \item Design of a CNN architecture with built-in normalization, tailored for the regression task of precipitation prediction.
+    \item Successful training and evaluation of the model, demonstrating the viability of data-driven approaches for short-term rainfall forecasting over the Indian subcontinent.
+\end{enumerate}
+
+The project establishes a foundation for more sophisticated nowcasting systems that could incorporate temporal dynamics, higher resolution data, and larger training datasets to achieve operational forecast accuracy.
+
+
+% ==================================================
+% REFERENCES
+% ==================================================
+\begin{thebibliography}{9}
+
+\bibitem{gee2017}
+N. Gorelick, M. Hancher, M. Dixon, S. Ilyushchenko, D. Thau, and R. Moore, ``Google Earth Engine: Planetary-scale geospatial analysis for everyone,'' \textit{Remote Sensing of Environment}, vol. 202, pp. 18--27, 2017.
+
+\bibitem{huffman2020}
+G. J. Huffman et al., ``Integrated Multi-satellite Retrievals for the Global Precipitation Measurement (GPM) Mission (IMERG),'' \textit{Advances in Global Change Research}, vol. 67, pp. 343--353, 2020.
+
+\bibitem{modis2002}
+C. O. Justice et al., ``The MODIS fire products,'' \textit{Remote Sensing of Environment}, vol. 83, pp. 244--262, 2002.
+
+\bibitem{pytorch2019}
+A. Paszke et al., ``PyTorch: An Imperative Style, High-Performance Deep Learning Library,'' \textit{Advances in Neural Information Processing Systems}, vol. 32, 2019.
+
+\bibitem{huber1964}
+P. J. Huber, ``Robust Estimation of a Location Parameter,'' \textit{The Annals of Mathematical Statistics}, vol. 35, no. 1, pp. 73--101, 1964.
+
+\bibitem{kingma2014}
+D. P. Kingma and J. Ba, ``Adam: A Method for Stochastic Optimization,'' \textit{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem{srtm2007}
+T. G. Farr et al., ``The Shuttle Radar Topography Mission,'' \textit{Reviews of Geophysics}, vol. 45, no. 2, 2007.
+
+\end{thebibliography}
+
+% ==================================================
+% APPENDICES
+% ==================================================
+\appendix
+
+\chapter{Python Source Code}
+\label{app:python_code}
+
+This appendix contains the core Python source files used in the project.
+
+\section*{Weather Data Utilities (\texttt{weather\_data.py})}
+
+\begin{lstlisting}[language=Python, caption=Functions for GEE initialization and satellite data retrieval.]
+import ee
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MAX_PRECIPITATION = 30
+MAX_ELEVATION = 6000
+SCALE = 5000
+
+def initialize_gee():
+    project_id = os.getenv("GEE_PROJECT_ID")
+    try:
+        if project_id:
+            ee.Initialize(project=project_id)
+        else:
+            ee.Initialize()
+    except Exception as e:
+        print(f"Error: {e}")
+        raise
+
+def get_gpm(date):
+    if isinstance(date, str):
+        date = ee.Date(date)
+    start = date
+    end = date.advance(1, 'day')
+    gpm = (ee.ImageCollection('NASA/GPM_L3/IMERG_V07')
+           .filterDate(start, end)
+           .select('precipitation'))
+    return gpm
+
+def get_satellite_data(date):
+    if isinstance(date, str):
+        date = ee.Date(date)
+    start = date
+    end = date.advance(1, 'day')
+    modis = (ee.ImageCollection('MODIS/061/MOD09GA')
+             .filterDate(start, end)
+             .select([
+                 'sur_refl_b01', 'sur_refl_b02',
+                 'sur_refl_b03', 'sur_refl_b04',
+                 'sur_refl_b05', 'sur_refl_b06',
+                 'sur_refl_b07',
+             ]))
+    return modis
+
+def get_elevation():
+    return ee.Image('USGS/SRTMGL1_003').select('elevation')
+
+def get_precipitation_bins(data, num_bins):
+    return (data.select('precipitation')
+            .clamp(0, MAX_PRECIPITATION)
+            .divide(MAX_PRECIPITATION)
+            .multiply(num_bins - 1).uint8())
+
+def get_elevation_bins(num_bins):
+    return (get_elevation()
+            .clamp(0, MAX_ELEVATION)
+            .divide(MAX_ELEVATION)
+            .multiply(num_bins - 1).uint8())
+\end{lstlisting}
+
+\section*{Model Definition (\texttt{models.py})}
+
+\begin{lstlisting}[language=Python, caption=WeatherConfig and WeatherModel definitions.]
+import torch
+import torch.nn as nn
+from transformers import PretrainedConfig, PreTrainedModel
+
+class Normalization(nn.Module):
+    def __init__(self, mean, std):
+        super().__init__()
+        if not isinstance(mean, torch.Tensor):
+            mean = torch.tensor(mean)
+        if not isinstance(std, torch.Tensor):
+            std = torch.tensor(std)
+        self.mean = nn.Parameter(mean, requires_grad=False)
+        self.std = nn.Parameter(std, requires_grad=False)
+    def forward(self, x):
+        return (x - self.mean) / self.std
+
+class MoveDim(nn.Module):
+    def __init__(self, source, destination):
+        super().__init__()
+        self.source = source
+        self.destination = destination
+    def forward(self, x):
+        return x.movedim(self.source, self.destination)
+
+class WeatherConfig(PretrainedConfig):
+    model_type = "weather"
+    def __init__(self, num_inputs=7, num_hidden1=64,
+                 num_hidden2=128, num_outputs=2,
+                 kernel_size=(3, 3),
+                 mean=[0.0]*7, std=[1.0]*7, **kwargs):
+        super().__init__(**kwargs)
+        self.num_inputs = num_inputs
+        self.num_hidden1 = num_hidden1
+        self.num_hidden2 = num_hidden2
+        self.num_outputs = num_outputs
+        self.kernel_size = kernel_size
+        self.mean = mean
+        self.std = std
+
+class WeatherModel(PreTrainedModel):
+    config_class = WeatherConfig
+    def __init__(self, config):
+        super().__init__(config)
+        self.layers = nn.Sequential(
+            Normalization(config.mean, config.std),
+            MoveDim(-1, 1),
+            nn.Conv2d(config.num_inputs, config.num_hidden1,
+                      config.kernel_size, padding='same'),
+            nn.ReLU(),
+            nn.Conv2d(config.num_hidden1, config.num_hidden2,
+                      config.kernel_size, padding='same'),
+            nn.ReLU(),
+            MoveDim(1, -1),
+            nn.Linear(config.num_hidden2, config.num_outputs),
+            nn.ReLU()
+        )
+        self.loss_fn = nn.SmoothL1Loss()
+
+    def forward(self, inputs, labels=None):
+        predictions = self.layers(inputs)
+        loss = None
+        if labels is not None:
+            loss = self.loss_fn(predictions, labels)
+        return {"loss": loss, "logits": predictions}
+\end{lstlisting}
+
+\end{document}

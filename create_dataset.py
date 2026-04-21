@@ -6,7 +6,7 @@ Implements the sample_points function for balanced coordinate selection
 and get_training_example for retrieving (input, label) pairs.
 
 Based on the professor's project specification:
-- Inputs: Multi-band satellite imagery (5x5 pixel patches, 52 bands)
+- Inputs: Multi-band satellite imagery (5x5 pixel patches, 7 MODIS bands)
 - Labels: Precipitation values at 2h and 6h in the future
 """
 
@@ -19,7 +19,7 @@ from weather_data import (
     initialize_gee,
     get_gpm,
     get_elevation,
-    get_goes_data,
+    get_satellite_data,
     get_precipitation_bins,
     get_elevation_bins,
     MAX_PRECIPITATION,
@@ -82,9 +82,9 @@ def sample_points(date, num_bins=NUM_BINS):
     # Calculate how many points per class
     num_points_per_class = max(1, NUM_POINTS // (num_bins * num_bins))
 
-    # Define a region of interest matching the GOES-16 footprint (The Americas)
-    # Using a rectangle instead of a global polygon avoids geometric ambiguity.
-    region = ee.Geometry.Rectangle([-125, -60, -25, 60])
+    # Define a region of interest covering India
+    # Longitude: ~68°E to ~97°E, Latitude: ~6°N to ~37°N
+    region = ee.Geometry.Rectangle([68, 6, 97, 37])
 
     # Stratified sampling to get balanced points across all bin classes
     points = unique_bins.stratifiedSample(
@@ -139,19 +139,19 @@ def get_training_example(date, point):
                or None if data is unavailable.
     """
     try:
-        # Get GOES satellite data as input (multi-spectral bands)
-        goes_collection = get_goes_data(date)
-        if goes_collection.size().getInfo() == 0:
+        # Get MODIS satellite data as input (multi-spectral bands)
+        satellite_collection = get_satellite_data(date)
+        if satellite_collection.size().getInfo() == 0:
             return None
 
-        # Use the first available GOES image closest to the time
-        goes_image = ee.Image(goes_collection.first())
+        # Use the first available MODIS image for this date
+        satellite_image = ee.Image(satellite_collection.first())
 
         # Define a small region around the point for the 5x5 patch
         region = point.buffer(SCALE * PATCH_SIZE / 2).bounds()
 
         # Sample the input bands as a 5x5 patch
-        input_data = goes_image.sampleRectangle(
+        input_data = satellite_image.sampleRectangle(
             region=region,
             defaultValue=0
         )
@@ -160,7 +160,7 @@ def get_training_example(date, point):
             return None
 
         # Get all band arrays
-        band_names = goes_image.bandNames().getInfo()
+        band_names = satellite_image.bandNames().getInfo()
         input_arrays = []
         for band in band_names:
             try:
@@ -265,12 +265,14 @@ def create_dataset(dates, output_dir='./data', max_points_per_date=50):
 if __name__ == "__main__":
     initialize_gee()
 
-    # Sample dates for dataset creation
-    # Use dates where GPM and GOES data are available (2018 onwards for GOES-16)
+    # Sample dates during the Indian monsoon season (Jun–Sep)
+    # MODIS data is available from 2000 onwards, GPM from 2000 onwards
     sample_dates = [
-        '2023-06-01',
-        '2023-06-15',
-        '2023-07-01',
+        '2023-07-01',   # Start of peak monsoon
+        '2023-07-15',   # Mid-July heavy rains
+        '2023-08-01',   # Peak monsoon month
+        '2023-08-15',   # Continued heavy rains
+        '2023-09-01',   # Late monsoon / retreating monsoon
     ]
 
     print("Starting dataset creation...")
